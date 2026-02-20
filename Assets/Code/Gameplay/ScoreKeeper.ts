@@ -18,19 +18,25 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	}
 
 	public async AddScoreToDataStoreInBatch(clicks: number): Promise<void> {
-		const clicksGlobal : ClickData | undefined = await Platform.Server.DataStore.GetKey<ClickData>(`Clicks-Global`);
+		const clicksGlobal : GlobalClickData | undefined = await Platform.Server.DataStore.GetKey<GlobalClickData>(`Clicks-Global`);
 		
-		const clickData : ClickData = {
-			clicks: clicks,
-			globalClicks: clicksGlobal?.globalClicks ?? 0 + clicks
+		const globalClickData : GlobalClickData = {
+			clicks: clicksGlobal?.clicks ?? 0 + clicks
 		}
 
-		await Platform.Server.DataStore.SetKey(`Clicks-Global`, clickData);
-		await Platform.Server.DataStore.SetKey(`Clicks-${Game.localPlayer.userId}`, clickData);
+		const playerClickData : PlayerClickData = {
+			clicks: clicks,
+		}
+
+		await Platform.Server.DataStore.SetKey(`Clicks-Global`, globalClickData);
+		await Platform.Server.DataStore.SetKey(`Clicks-Player:${Game.localPlayer.userId}`, playerClickData);
 	}
 }
 
-export class ClickData {
+export class GlobalClickData {
 	clicks: number;
-	globalClicks: number;
+}
+
+export class PlayerClickData {
+	clicks: number;
 }
