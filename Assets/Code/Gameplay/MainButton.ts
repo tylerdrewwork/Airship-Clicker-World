@@ -11,7 +11,7 @@ export default class MainButton extends AirshipBehaviour {
 		if (button) {
 			button.onClick.Connect(() => {
 				print("Button clicked!");
-				this.gameRules.scoreKeeper.AddScore(1);
+				this.gameRules.scoreKeeper.AddClicks(1);
 			});
 		}
 	}
