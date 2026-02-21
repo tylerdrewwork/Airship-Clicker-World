@@ -2,7 +2,10 @@ import { Platform } from "@Easy/Core/Shared/Airship";
 import { Game } from "@Easy/Core/Shared/Game";
 import { NetworkFunction } from "@Easy/Core/Shared/Network/NetworkFunction";
 import { Player } from "@Easy/Core/Shared/Player/Player";
+import GameRules from "Code/GameRules";
 
+// TODO instead of each player make DataStore requests, there should be a NetworkIdentity object
+// that tracks clicks for each player on the server and then makes ONE datastore request
 export default class ScoreKeeper extends AirshipBehaviour {
 
 	private static readonly GLOBAL_CLICK_DATA_KEY = `Clicks-Global`;
@@ -11,7 +14,7 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	/// Every `BATCH_INTERVAL` seconds the score will update from the datastore
 	private static readonly BATCH_INTERVAL = 5; // In Seconds
 
-	// NetworkFunction's generics:
+	// Tyler's note for learning NetworkFunction's generics:
 	// first generic argument is the object that the client fires to the server
 	// second generic argument is the object that is returned via callback
 	private addClicks = new NetworkFunction<{ clicks: number }, GlobalClickData>("AddClicks");
@@ -42,12 +45,12 @@ export default class ScoreKeeper extends AirshipBehaviour {
 		if (Game.IsClient() && Time.timeSinceLevelLoad - this.lastBatchTime >= ScoreKeeper.BATCH_INTERVAL) {
 			this.lastBatchTime = Time.timeSinceLevelLoad;
 			this.C_RequestAddClicks();
-			
 		}
 	}
 
-	public AddClickLocal(clicks: number): void {
+	public AddClickLocal(): void {
 		this.clicksInBatch++;
+		GameRules.Get().clickVisuals.UpdateLocalClick(this.clicksInBatch);
 	}
 
 	public C_RequestAddClicks(): void {
@@ -56,6 +59,7 @@ export default class ScoreKeeper extends AirshipBehaviour {
 		// Client -> Server
 		// Network Signal 
 		let newGlobalClicks = this.addClicks.client.FireServer({ clicks: this.clicksInBatch });
+		GameRules.Get().clickVisuals.UpdateGlobalClicks(newGlobalClicks.clicks);
 		this.clicksInBatch = 0;
 	}
 
