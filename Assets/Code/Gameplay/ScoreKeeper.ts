@@ -1,6 +1,7 @@
-import { Platform } from "@Easy/Core/Shared/Airship";
+import { Airship, Platform } from "@Easy/Core/Shared/Airship";
 import { Game } from "@Easy/Core/Shared/Game";
 import { NetworkFunction } from "@Easy/Core/Shared/Network/NetworkFunction";
+import { NetworkSignal } from "@Easy/Core/Shared/Network/NetworkSignal";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import GameRules from "Code/GameRules";
 
@@ -10,6 +11,7 @@ export default class ScoreKeeper extends AirshipBehaviour {
 
 	private static readonly GLOBAL_CLICK_DATA_KEY = `Clicks-Global`;
 	private clicksInBatch = 0;
+	private cachedPlayerClicks = 0;
 	private lastBatchTime = 0;
 	/// Every `BATCH_INTERVAL` seconds the score will update from the datastore
 	private static readonly BATCH_INTERVAL = 5; // In Seconds
@@ -19,11 +21,13 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	// second generic argument is the object that is returned via callback
 	private addClicks = new NetworkFunction<{ clicks: number }, GlobalClickData>("AddClicks");
 
+	private initSyncClicks = new NetworkSignal<{ playerClicks: number, globalClicks: number}>("GetClicks");
 
 	override Start(): void {
 		print("Hello, World! from ScoreKeeper!");
 
 		if (Game.IsServer()) {
+			// Connect addClicks NetworkFunction callback
 			this.addClicks.server.SetCallback((player, event) => {
 				let clicksResult = 0;
 				
@@ -34,8 +38,19 @@ export default class ScoreKeeper extends AirshipBehaviour {
 
 				// NetworkFunction needs a GlobalClickData
 				return {
-					clicks: clicksResult
+					clicks: 150
 				}
+			})
+
+			// On Player Joined
+			Airship.Players.onPlayerJoined.Connect(player => this.S_OnPlayerJoined(player));
+		}
+
+		// Initialize the click amounts
+		if (Game.IsClient()) {
+			this.initSyncClicks.client.OnServerEvent((data) => {
+				this.cachedPlayerClicks = data.playerClicks;
+				GameRules.Get().clickVisuals.UpdateGlobalClicks(data.globalClicks);
 			})
 		}
 	}
@@ -50,7 +65,8 @@ export default class ScoreKeeper extends AirshipBehaviour {
 
 	public AddClickLocal(): void {
 		this.clicksInBatch++;
-		GameRules.Get().clickVisuals.UpdateLocalClick(this.clicksInBatch);
+		this.cachedPlayerClicks++;
+		GameRules.Get().clickVisuals.UpdateLocalClick(this.cachedPlayerClicks);
 	}
 
 	public C_RequestAddClicks(): void {
@@ -94,14 +110,30 @@ export default class ScoreKeeper extends AirshipBehaviour {
 		return globalClickData;
 	}
 
+	@Server() 
+	private async S_OnPlayerJoined(player: Player) {
+		// Sync player's clicks to clientside
+		const playerClickData = await Platform.Server.DataStore.GetKey<PlayerClickData>(`Clicks-Player:${player.userId}`);
+		let playerClicks = 0;
+		if (playerClickData) playerClicks = playerClickData.clicks;
+
+		const globalClickData = await Platform.Server.DataStore.GetKey<GlobalClickData>(
+			ScoreKeeper.GLOBAL_CLICK_DATA_KEY,
+		);
+		let globalClicks = 0;
+		if (globalClickData) globalClicks = globalClickData.clicks;
+
+		this.initSyncClicks.server.FireClient(player, {playerClicks, globalClicks})
+	}
+
 	/* This is where clicks can be visually updates when pulling from the Server
 	* Since we retrieve data every 5 seconds, we can simulate the clicks on the button
 	* from other players over 5 seconds.
 	*/
-	private UpdateClicksVisuals() : void {
-		// TODO add cool visuals. For now, just update the text
+	// private UpdateGlobalClicksVisuals() : void {
+	// 	// TODO add cool visuals. For now, just update the text
 
-	}
+	// }
 }
 
 export class GlobalClickData {
