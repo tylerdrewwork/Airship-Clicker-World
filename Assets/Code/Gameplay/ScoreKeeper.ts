@@ -1,9 +1,6 @@
 import { Platform } from "@Easy/Core/Shared/Airship";
 import { Game } from "@Easy/Core/Shared/Game";
-import { AirshipNetworkBehaviour } from "@Easy/Core/Shared/Network/AirshipNetworkBehaviour";
 import { NetworkFunction } from "@Easy/Core/Shared/Network/NetworkFunction";
-import { NetworkSignal } from "@Easy/Core/Shared/Network/NetworkSignal";
-import { Command } from "@Easy/Core/Shared/Network/ServerRpc";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 
 export default class ScoreKeeper extends AirshipBehaviour {
@@ -99,7 +96,7 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	*/
 	private UpdateClicksVisuals() : void {
 		// TODO add cool visuals. For now, just update the text
-		
+
 	}
 }
 
