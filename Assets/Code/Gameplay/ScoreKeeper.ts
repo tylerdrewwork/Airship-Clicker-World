@@ -22,6 +22,10 @@ export default class ScoreKeeper extends AirshipBehaviour {
 
 	public autoClickingToggle: Toggle;
 
+	public topClickersTmp: TextMeshProUGUI;
+	private leaderboardUpdateInterval = 10;
+	private lastLeaderboardUpdateTime = 0;
+
 
 	// Tyler's note for learning NetworkFunction's generics:
 	// first generic argument is the object that the client fires to the server
@@ -31,6 +35,9 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	private syncGlobalClicksToClient = new NetworkSignal<{ clicks: number }>("SyncGlobalClicksToClient");
 
 	private initSyncClicks = new NetworkSignal<{ playerClicks: number, globalClicks: number}>("GetClicks");
+
+	
+	private sendLeaderboardToClients = new NetworkSignal<{leaderboardData: LeaderboardData[]}>("SendLeaderboardToClients");
 
 	override Start(): void {
 		print("Hello, World! from ScoreKeeper!");
@@ -63,6 +70,10 @@ export default class ScoreKeeper extends AirshipBehaviour {
 			this.syncGlobalClicksToClient.client.OnServerEvent((data) => {
 				this.UpdateGlobalClicksVisuals(data.clicks);
 			})
+
+			this.sendLeaderboardToClients.client.OnServerEvent(data => {
+				this.UpdateLeaderboardVisuals(data.leaderboardData);
+			})
 		}
 	}
 
@@ -79,6 +90,10 @@ export default class ScoreKeeper extends AirshipBehaviour {
 		if (Game.IsClient() && Time.timeSinceLevelLoad - this.lastBatchTime >= ScoreKeeper.BATCH_INTERVAL) {
 			this.lastBatchTime = Time.timeSinceLevelLoad;
 			this.C_RequestAddClicks();
+		}
+
+		if (Game.IsServer() && Time.timeSinceLevelLoad - this.lastLeaderboardUpdateTime >= this.leaderboardUpdateInterval){
+			this.S_UpdateLeaderboard();
 		}
 	}
 
@@ -100,6 +115,23 @@ export default class ScoreKeeper extends AirshipBehaviour {
 		// GameRules.Get().clickVisuals.UpdateGlobalClicks(newGlobalClicks.clicks); // no longer needed due to addclicks change to NetworkSignal
 		this.addClicksToServer.client.FireServer({ clicks: this.clicksInBatch });
 		this.clicksInBatch = 0;
+	}
+
+	@Server()
+	private async S_UpdateLeaderboard() {
+		// Update a leaderboard
+		
+		const entries = await Platform.Server.Leaderboard.GetRankRange("TopClickers", 0, 5);
+
+		// get usernames
+		const idMap = await Platform.Server.User.GetUsersById(entries.map(e => e.id));
+
+		const entriesWithUserdata: LeaderboardData[] = entries.map((entry) => ({
+			username: idMap[entry.id]?.username ?? "Unknown User",
+			clicks: entry.value,
+		}));		
+
+		this.sendLeaderboardToClients.server.FireAllClients({ leaderboardData: entriesWithUserdata });
 	}
 
 	@Server()
@@ -130,6 +162,11 @@ export default class ScoreKeeper extends AirshipBehaviour {
 
 		await Platform.Server.DataStore.SetKey(playerClickDataKey, playerClickData);
 		await Platform.Server.DataStore.SetKey(ScoreKeeper.GLOBAL_CLICK_DATA_KEY, globalClickData);
+
+		await Platform.Server.Leaderboard.Update("TopClicks", {
+			[player.userId]: playerClickData.clicks
+		})
+
 		return globalClickData;
 	}
 
@@ -158,6 +195,19 @@ export default class ScoreKeeper extends AirshipBehaviour {
 		GameRules.Get().clickVisuals.UpdateGlobalClicks(clicks);
 		this.cachedGlobalClicks = clicks;
 	}
+
+	private UpdateLeaderboardVisuals(data: LeaderboardData[]) {
+		let text = "";
+		for (let i = 0; i < data.size(); i++) {
+			text += `${data[0].username}: ${data[0].clicks}`;
+		}
+		this.topClickersTmp.text = text;
+	}
+}
+
+export class LeaderboardData {
+	username: string; 
+	clicks: number;
 }
 
 export class GlobalClickData {
