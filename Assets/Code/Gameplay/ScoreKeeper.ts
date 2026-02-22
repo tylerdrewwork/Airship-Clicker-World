@@ -12,14 +12,18 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	private static readonly GLOBAL_CLICK_DATA_KEY = `Clicks-Global`;
 	private clicksInBatch = 0;
 	private cachedPlayerClicks = 0;
+	private cachedGlobalClicks = 0;
 	private lastBatchTime = 0;
 	/// Every `BATCH_INTERVAL` seconds the score will update from the datastore
 	private static readonly BATCH_INTERVAL = 5; // In Seconds
 
+
 	// Tyler's note for learning NetworkFunction's generics:
 	// first generic argument is the object that the client fires to the server
 	// second generic argument is the object that is returned via callback
-	private addClicks = new NetworkFunction<{ clicks: number }, GlobalClickData>("AddClicks");
+	// That being said, this was converted back to NetworkSignal, which has no specified return type
+	private addClicksToServer = new NetworkSignal<{ clicks: number }>("AddClicks");
+	private syncGlobalClicksToClient = new NetworkSignal<{ clicks: number }>("SyncGlobalClicksToClient");
 
 	private initSyncClicks = new NetworkSignal<{ playerClicks: number, globalClicks: number}>("GetClicks");
 
@@ -28,29 +32,31 @@ export default class ScoreKeeper extends AirshipBehaviour {
 
 		if (Game.IsServer()) {
 			// Connect addClicks NetworkFunction callback
-			this.addClicks.server.SetCallback((player, event) => {
-				let clicksResult = 0;
-				
-				// 
+			this.addClicksToServer.server.OnClientEvent((player, event) => {
+				// Once request resolves, send globalclicks data back to player
 				this.S_AddScoreToDataStoreInBatch(player, event.clicks).then(res => {
+					let clicksResult = 0;
 					if (res) clicksResult = res.clicks;
+					this.syncGlobalClicksToClient.server.FireClient(player, { clicks: clicksResult });
 				});
-
-				// NetworkFunction needs a GlobalClickData
-				return {
-					clicks: 150
-				}
 			})
 
 			// On Player Joined
 			Airship.Players.onPlayerJoined.Connect(player => this.S_OnPlayerJoined(player));
 		}
 
-		// Initialize the click amounts
 		if (Game.IsClient()) {
+			// Initialize the click amounts
 			this.initSyncClicks.client.OnServerEvent((data) => {
 				this.cachedPlayerClicks = data.playerClicks;
-				GameRules.Get().clickVisuals.UpdateGlobalClicks(data.globalClicks);
+				this.cachedGlobalClicks = data.globalClicks;
+				GameRules.Get().clickVisuals.UpdateLocalClick(data.playerClicks);
+				GameRules.Get().clickVisuals.UpdateGlobalClicks(data.globalClicks); // update directly instead of method to bypass animation
+			});
+
+			// Subscribe to the server sending globalclick data back to the client
+			this.syncGlobalClicksToClient.client.OnServerEvent((data) => {
+				this.UpdateGlobalClicksVisuals(data.clicks);
 			})
 		}
 	}
@@ -66,7 +72,11 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	public AddClickLocal(): void {
 		this.clicksInBatch++;
 		this.cachedPlayerClicks++;
-		GameRules.Get().clickVisuals.UpdateLocalClick(this.cachedPlayerClicks);
+		this.cachedGlobalClicks++;
+
+		let cv = GameRules.Get().clickVisuals;
+		cv.UpdateLocalClick(this.cachedPlayerClicks);
+		cv.UpdateGlobalClicks(this.cachedGlobalClicks);
 	}
 
 	public C_RequestAddClicks(): void {
@@ -74,8 +84,8 @@ export default class ScoreKeeper extends AirshipBehaviour {
 
 		// Client -> Server
 		// Network Signal 
-		let newGlobalClicks = this.addClicks.client.FireServer({ clicks: this.clicksInBatch });
-		GameRules.Get().clickVisuals.UpdateGlobalClicks(newGlobalClicks.clicks);
+		// GameRules.Get().clickVisuals.UpdateGlobalClicks(newGlobalClicks.clicks); // no longer needed due to addclicks change to NetworkSignal
+		this.addClicksToServer.client.FireServer({ clicks: this.clicksInBatch });
 		this.clicksInBatch = 0;
 	}
 
@@ -130,10 +140,11 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	* Since we retrieve data every 5 seconds, we can simulate the clicks on the button
 	* from other players over 5 seconds.
 	*/
-	// private UpdateGlobalClicksVisuals() : void {
-	// 	// TODO add cool visuals. For now, just update the text
-
-	// }
+	private UpdateGlobalClicksVisuals(clicks : number) : void {
+		// TODO add cool visuals. For now, just update the text
+		GameRules.Get().clickVisuals.UpdateGlobalClicks(clicks);
+		this.cachedGlobalClicks = clicks;
+	}
 }
 
 export class GlobalClickData {
