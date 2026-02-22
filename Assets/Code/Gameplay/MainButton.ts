@@ -11,7 +11,10 @@ export default class MainButton extends AirshipBehaviour {
 		if (button) {
 			button.onClick.Connect(() => {
 				print("Button clicked!");
-				this.gameRules.scoreKeeper.AddClickLocal();
+
+				if (!this.gameRules.scoreKeeper.isAutoClicking) {
+					this.gameRules.scoreKeeper.AddClickLocal();
+				}
 			});
 		}
 	}

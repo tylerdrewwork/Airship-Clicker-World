@@ -45,7 +45,7 @@ export default class GameRules extends AirshipSingleton {
 				let pchar = player.character?.gameObject.GetAirshipComponent<CustomCharacterController>();
 				if (pchar) {
 
-					if (!pchar.cursorColor) {
+					if (!pchar.cursorColor || pchar.cursorColor.a === 0) {
 						let randomColorIndex = math.random(0, GameRules.Get().possibleColors.size() - 1);
 						let color = GameRules.Get().possibleColors[randomColorIndex];
 						pchar.cursorColor = color;

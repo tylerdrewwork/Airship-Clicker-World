@@ -17,6 +17,11 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	/// Every `BATCH_INTERVAL` seconds the score will update from the datastore
 	private static readonly BATCH_INTERVAL = 5; // In Seconds
 
+	public isAutoClicking: boolean = false;
+	private lastAutoclickTime = 0;
+
+	public autoClickingToggle: Toggle;
+
 
 	// Tyler's note for learning NetworkFunction's generics:
 	// first generic argument is the object that the client fires to the server
@@ -62,6 +67,14 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	}
 
 	override Update(): void {
+		if (this.autoClickingToggle.isOn) this.isAutoClicking = true;
+		else this.isAutoClicking = false;
+
+		if (Game.IsClient() && this.isAutoClicking && Time.timeSinceLevelLoad - this.lastAutoclickTime >= 1) {
+			this.lastAutoclickTime = Time.timeSinceLevelLoad;
+			this.AddClickLocal();
+		}
+
 		// run every 5 seconds
 		if (Game.IsClient() && Time.timeSinceLevelLoad - this.lastBatchTime >= ScoreKeeper.BATCH_INTERVAL) {
 			this.lastBatchTime = Time.timeSinceLevelLoad;
