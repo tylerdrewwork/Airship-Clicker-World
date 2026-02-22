@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55587e6da00a44bf9f7d5798297ebf2b, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  gameId: fbbd5433-410b-4c19-95b3-9bbcc08038f8
+  gameId: ec20cc55-8e5e-4b24-a746-bcb921e587f2
   startingScene: {fileID: 102900000, guid: e9baa4b514ca7466592cd454e7e23b0a, type: 3}
   gameScenes:
   - {fileID: 102900000, guid: e9baa4b514ca7466592cd454e7e23b0a, type: 3}
   packages:
   - id: '@Easy/Core'
     assetVersion: 412
-    codeVersion: 1063
-    publishVersionNumber: 797
+    codeVersion: 1065
+    publishVersionNumber: 799
     game: 0
     localSource: 0
     disabled: 0
@@ -102,5 +102,5 @@ MonoBehaviour:
   callbacksOnDisable2D: 1
   reuseCollisionCallbacks2D: 1
   autoSyncTransforms2D: 0
-  supportsMobile: 0
+  supportsMobile: 1
   compileURPShaders: 0

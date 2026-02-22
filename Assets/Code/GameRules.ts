@@ -9,6 +9,8 @@ export default class GameRules extends AirshipSingleton {
 
 	public scoreKeeper: ScoreKeeper;
 	public clickVisuals: ClickVisuals;
+
+	public mainCamera: Camera;
 	
 	private bin = new Bin();
 
