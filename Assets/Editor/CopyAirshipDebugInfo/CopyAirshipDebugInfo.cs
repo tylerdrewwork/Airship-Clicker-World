@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.PackageManager;
 
 public static class CopyAirshipDebugInfo
 {
@@ -10,7 +9,7 @@ public static class CopyAirshipDebugInfo
     public static void CopyDebugInfo()
     {
         string airshipVersion = "unknown";
-        foreach (var p in PackageInfo.GetAllRegisteredPackages())
+        foreach (var p in UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages())
         {
             if (p.name == AirshipPackageName)
             {
