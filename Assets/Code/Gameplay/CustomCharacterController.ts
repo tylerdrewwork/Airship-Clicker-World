@@ -28,10 +28,10 @@ export default class CustomCharacterController extends AirshipBehaviour {
 					// customChar.UpdateColorAndName(event.color, event.username);
 					print("event color & user" + event.color + event.username)
 					let usernameTmp = customChar.gameObject.GetComponentInChildren<TextMeshProUGUI>();
-					let sr = customChar.gameObject.GetComponentInChildren<SpriteRenderer>();
-					print("sr and tmp" + sr + usernameTmp)
+					let image = customChar.gameObject.GetComponentInChildren<Image>();
+					print("sr and tmp" + image + usernameTmp)
 
-					if (sr) sr.color = event.color;
+					if (image) image.color = event.color;
 					if (usernameTmp) usernameTmp.text = event.username
 				}
 			})
@@ -87,8 +87,8 @@ export default class CustomCharacterController extends AirshipBehaviour {
 	private FollowCursor() {
 		// print("following")
 		//Point the character towards the mouse
-		let mousepos = Mouse.GetPositionVector3();
-		let newPos = GameRules.Get().mainCamera.ScreenToWorldPoint(mousepos);
+		let newPos = Mouse.GetPositionVector3();
+		// let newPos = GameRules.Get().mainCamera.ScreenToWorldPoint(mousepos);
 
 		//Move our custom cursor graphic
 		this.cursorRect.position = new Vector3(

@@ -23,7 +23,7 @@ export default class ScoreKeeper extends AirshipBehaviour {
 	public autoClickingToggle: Toggle;
 
 	public topClickersTmp: TextMeshProUGUI;
-	private leaderboardUpdateInterval = 10;
+	private leaderboardUpdateInterval = 20;
 	private lastLeaderboardUpdateTime = 0;
 
 
@@ -93,6 +93,7 @@ export default class ScoreKeeper extends AirshipBehaviour {
 		}
 
 		if (Game.IsServer() && Time.timeSinceLevelLoad - this.lastLeaderboardUpdateTime >= this.leaderboardUpdateInterval){
+			this.lastLeaderboardUpdateTime = Time.timeSinceLevelLoad;
 			this.S_UpdateLeaderboard();
 		}
 	}
@@ -201,6 +202,7 @@ export default class ScoreKeeper extends AirshipBehaviour {
 		for (let i = 0; i < data.size(); i++) {
 			text += `${data[0].username}: ${data[0].clicks}`;
 		}
+		print(`Updating leaderboard visauls with ${text}`);
 		this.topClickersTmp.text = text;
 	}
 }
