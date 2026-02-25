@@ -119,3 +119,6 @@ Assets/AirshipPackages/@Easy/Core.meta
 Assets/TypeScriptEditorMetadata.aseditorinfo.meta
 
 Assets/AirshipPackages/@Easy.meta
+
+Assets/AssetInventory/*
+Assets/AssetInventory.meta
