@@ -36,6 +36,10 @@ export default class CustomCharacterController extends AirshipBehaviour {
 					if (usernameTmp) usernameTmp.text = event.username
 				}
 			})
+			
+			Mouse.onLeftDown.Connect((event) => {
+				this.OnMouseLeftDown();
+			})
 		}
 		
 		
@@ -45,10 +49,6 @@ export default class CustomCharacterController extends AirshipBehaviour {
 
 	override Update(): void {
 		if (Game.IsClient() && this.isOwner) this.FollowCursor();
-
-		if (Game.IsClient() && this.isOwner) {
-			this.C_HandleMouseClick();
-		}
 	}
 
 	@Client()
@@ -105,9 +105,7 @@ export default class CustomCharacterController extends AirshipBehaviour {
 
 	}
 
-	@Client()
-	private C_HandleMouseClick() {
-
+	private OnMouseLeftDown() {
 		if (!Mouse.isLeftDown) return;
 		const gr = GameRules.Get();
 		
