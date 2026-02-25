@@ -125,8 +125,8 @@ export default class CustomCharacterController extends AirshipBehaviour {
 					print("clicked!")
 					gr.scoreKeeper.AddClickLocal();
 					break;
+				}
 			}
 		}
 	}
-
 }
