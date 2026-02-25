@@ -1,6 +1,7 @@
 import { Game } from "@Easy/Core/Shared/Game";
 import { Mouse } from "@Easy/Core/Shared/UserInput";
 import GameRules from "Code/GameRules";
+import MainButton from "Code/Gameplay/MainButton";
 import { NetworkFunction } from "@Easy/Core/Shared/Network/NetworkFunction";
 import { NetworkSignal } from "@Easy/Core/Shared/Network/NetworkSignal";
 import { Airship } from '../../AirshipPackages/@Easy/Core/Shared/Airship';
@@ -44,6 +45,10 @@ export default class CustomCharacterController extends AirshipBehaviour {
 
 	override Update(): void {
 		if (Game.IsClient() && this.isOwner) this.FollowCursor();
+
+		if (Game.IsClient() && this.isOwner) {
+			this.C_HandleMouseClick();
+		}
 	}
 
 	@Client()
@@ -73,7 +78,7 @@ export default class CustomCharacterController extends AirshipBehaviour {
 			}
 
 			
-			Mouse.SetCursorVisible(false);
+			Mouse.SetCursorVisible(true);
 			
 			onCustomCharacterInitialized.client.FireServer({});
 		}
@@ -96,5 +101,32 @@ export default class CustomCharacterController extends AirshipBehaviour {
 			newPos.y,
 			0
 		);
+
+
 	}
+
+	@Client()
+	private C_HandleMouseClick() {
+
+		if (!Mouse.isLeftDown) return;
+		const gr = GameRules.Get();
+		
+		const mousePos = Mouse.GetPositionVector3();
+		const ray = Camera.main.ScreenPointToRay(mousePos);
+		const hits = Physics.RaycastAll(ray.origin, ray.direction, 50000, LayerMask.GetMask("GameLayer0"));
+		// print (hits.size());
+		if (hits.size() > 0) {
+			// print ("2, " + hits.size())
+			for (const hit of hits) {
+				const go = hit.transform.gameObject;
+				if (!go) continue;
+				const mainButton = go.GetAirshipComponent<MainButton>() ?? go.GetAirshipComponentInParent<MainButton>();
+				if (mainButton && gr.scoreKeeper && !gr.scoreKeeper.isAutoClicking) {
+					print("clicked!")
+					gr.scoreKeeper.AddClickLocal();
+					break;
+			}
+		}
+	}
+
 }

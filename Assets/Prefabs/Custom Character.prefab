@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5556962797469836570}
   - component: {fileID: 8375984409719407159}
-  - component: {fileID: 6392608697197992983}
   - component: {fileID: 4155436271947147003}
   - component: {fileID: 6024952680245651918}
   - component: {fileID: 5988901272164709877}
@@ -61,199 +60,6 @@ MonoBehaviour:
     currentUserId: 
     currentUserName: 
   cancelPendingDownload: 0
---- !u!114 &6392608697197992983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5068129117290921888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  guid: 3deb3c79-0c65-41a5-a1d9-8dae0acb4826
-  script: {fileID: -8502596097384394428, guid: 231b41c7c69568446b98353c21d6785d, type: 3}
-  scriptPath: Assets/AirshipPackages/@Easy/Core/Shared/Character/Character.lua
-  forceContext: 0
-  metadata:
-    name: Character
-    singleton: 0
-    decorators: []
-    properties:
-    - name: animationHelper
-      type: object
-      objectType: CharacterAnimationHelper
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 2105203280307024106}
-      modified: 1
-    - name: movement
-      type: object
-      objectType: CharacterMovement
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators:
-      - name: Header
-        parameters:
-        - type: string
-          serializedValue: '"References"'
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 0}
-      modified: 1
-    - name: accessoryBuilder
-      type: object
-      objectType: AccessoryBuilder
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 8375984409719407159}
-      modified: 1
-    - name: model
-      type: object
-      objectType: GameObject
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 6288767689185425628}
-      modified: 1
-    - name: rigRoot
-      type: object
-      objectType: GameObject
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 6989421565227118382}
-      modified: 1
-    - name: footstepAudioSource
-      type: object
-      objectType: AudioSource
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 1476313165903426296}
-      modified: 1
-    - name: networkIdentity
-      type: object
-      objectType: NetworkIdentity
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 0}
-      modified: 1
-    - name: autoLoadAvatarOutfit
-      type: boolean
-      objectType: 
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators:
-      - name: Header
-        parameters:
-        - type: string
-          serializedValue: '"Variables"'
-      nullable: 0
-      serializedValue: 1
-      serializedObject: {fileID: 0}
-      modified: 1
-    - name: animator
-      type: object
-      objectType: Animator
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 4419321622261706734}
-      modified: 1
-    displayIcon: {fileID: 0}
-    displayName: 
 --- !u!114 &4155436271947147003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,7 +292,7 @@ MonoBehaviour:
           serializedValue: '"References"'
       nullable: 0
       serializedValue: 
-      serializedObject: {fileID: 6392608697197992983}
+      serializedObject: {fileID: 0}
       modified: 1
     - name: flinchClipViewmodel
       type: object
@@ -1520,17 +1326,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4845036152095233570, guid: e7a11eaa5c64b9b4788a1b360cd7bdac, type: 3}
   m_PrefabInstance: {fileID: 123765638178603419}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6989421565227118382 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7010096709717470901, guid: e7a11eaa5c64b9b4788a1b360cd7bdac, type: 3}
-  m_PrefabInstance: {fileID: 123765638178603419}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7107758839628440574 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7139438170797187685, guid: e7a11eaa5c64b9b4788a1b360cd7bdac, type: 3}
   m_PrefabInstance: {fileID: 123765638178603419}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6989421565227118382}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 995b0450810b32c4aa9bedf565fa7c78, type: 3}
@@ -1541,7 +1342,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7233710194765161957, guid: e7a11eaa5c64b9b4788a1b360cd7bdac, type: 3}
   m_PrefabInstance: {fileID: 123765638178603419}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6989421565227118382}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7eb696a0152059a4896e326dc2378287, type: 3}

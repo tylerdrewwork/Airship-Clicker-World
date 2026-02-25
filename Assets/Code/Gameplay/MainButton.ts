@@ -1,19 +1,15 @@
 import GameRules from "Code/GameRules";
 
 export default class MainButton extends AirshipBehaviour {
-	
-	public gameRules: GameRules;
 
 	override Start(): void {
-		print("Hello, World! from MainButton!");
+		const gameRules = GameRules.Get();
 
 		const button = gameObject.GetComponent<Button>();
 		if (button) {
 			button.onClick.Connect(() => {
-				print("Button clicked!");
-
-				if (!this.gameRules.scoreKeeper.isAutoClicking) {
-					this.gameRules.scoreKeeper.AddClickLocal();
+				if (!gameRules.scoreKeeper.isAutoClicking) {
+					gameRules.scoreKeeper.AddClickLocal();
 				}
 			});
 		}

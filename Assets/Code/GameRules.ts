@@ -31,7 +31,7 @@ export default class GameRules extends AirshipSingleton {
 			});
 
 			Airship.Camera.SetEnabled(false);
-			Mouse.SetCursorVisible(false);
+			// Mouse.SetCursorVisible(false);
 
 			Mouse.AddUnlocker();
 		}
