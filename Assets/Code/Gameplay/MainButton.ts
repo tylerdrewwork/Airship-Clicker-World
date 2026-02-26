@@ -11,17 +11,26 @@ export default class MainButton extends AirshipBehaviour {
 		const bounceTween = this.gameObject.GetAirshipComponent<BounceTween>();
 		if (bounceTween) this.bounceTween = bounceTween;
 		
-		if (button) {
+		// if (button) {
 			
-			button.onClick.Connect(() => {
-				if (!gameRules.scoreKeeper.isAutoClicking) {
-					gameRules.scoreKeeper.AddClickLocal();
-					if (bounceTween) this.bounceTween.Bounce();
-				}
-			});
-		}
+		// 	button.onClick.Connect(() => {
+		// 		if (!gameRules.scoreKeeper.isAutoClicking) {
+		// 			gameRules.scoreKeeper.AddClickLocal();
+		// 			if (bounceTween) this.bounceTween.Bounce();
+		// 		}
+		// 	});
+		// }
 
 		
 
+	}
+
+	public OnClick() {
+		let gameRules = GameRules.Get();
+
+		if (!gameRules.scoreKeeper.isAutoClicking) {
+			gameRules.scoreKeeper.AddClickLocal();
+			if (this.bounceTween) this.bounceTween.Bounce();
+		}
 	}
 }

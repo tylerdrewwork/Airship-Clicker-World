@@ -119,9 +119,8 @@ export default class CustomCharacterController extends AirshipBehaviour {
  				const go = hit.transform.gameObject;
 				if (!go) continue;
 				const mainButton = go.GetAirshipComponent<MainButton>() ?? go.GetAirshipComponentInParent<MainButton>();
-				if (mainButton && gr.scoreKeeper && !gr.scoreKeeper.isAutoClicking) {
-					print("clicked!")
-					gr.scoreKeeper.AddClickLocal();
+				if (mainButton) {
+					mainButton.OnClick();
 					break;
 				}
 			}
