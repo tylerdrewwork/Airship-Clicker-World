@@ -112,9 +112,9 @@ export default class CustomCharacterController extends AirshipBehaviour {
 		const mousePos = Mouse.GetPositionVector3();
 		const ray = GameRules.Get().mainCamera.ScreenPointToRay(mousePos);
 		const hits = Physics.RaycastAll(ray.origin, ray.direction, 50000);
-		print (hits.size());
+		// print (hits.size());
 		if (hits.size() > 0) {
-			print ("2, " + hits.size())
+			// print ("2, " + hits.size())
 			for (const hit of hits) {
  				const go = hit.transform.gameObject;
 				if (!go) continue;
