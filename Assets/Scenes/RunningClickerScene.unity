@@ -15258,21 +15258,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968298736}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a3997cd9184f2b439570425a387cdb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   refreshMode: 1
   transformSpace: 1
-  translate: 0
-  translationSpeed: {x: 0, y: 0, z: 0}
-  rotate: 0
-  angularRotationSpeed: {x: 0, y: 0, z: 0}
+  translate: 1
+  translationSpeed: {x: 0, y: 0.5, z: 0}
+  rotate: 1
+  angularRotationSpeed: {x: 0, y: 6, z: 3}
   scale: 0
   scaleSpeed: {x: 0, y: 0, z: 0}
-  sineMotion: 0
-  sineMod: 1
+  sineMotion: 1
+  sineMod: 1.4
   sineOffset: 0
   randomizeOffset: 0
 --- !u!114 &1968298743
