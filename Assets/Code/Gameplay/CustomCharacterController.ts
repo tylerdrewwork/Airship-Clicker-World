@@ -110,13 +110,13 @@ export default class CustomCharacterController extends AirshipBehaviour {
 		const gr = GameRules.Get();
 		
 		const mousePos = Mouse.GetPositionVector3();
-		const ray = Camera.main.ScreenPointToRay(mousePos);
-		const hits = Physics.RaycastAll(ray.origin, ray.direction, 50000, LayerMask.GetMask("GameLayer0"));
-		// print (hits.size());
+		const ray = GameRules.Get().mainCamera.ScreenPointToRay(mousePos);
+		const hits = Physics.RaycastAll(ray.origin, ray.direction, 50000);
+		print (hits.size());
 		if (hits.size() > 0) {
-			// print ("2, " + hits.size())
+			print ("2, " + hits.size())
 			for (const hit of hits) {
-				const go = hit.transform.gameObject;
+ 				const go = hit.transform.gameObject;
 				if (!go) continue;
 				const mainButton = go.GetAirshipComponent<MainButton>() ?? go.GetAirshipComponentInParent<MainButton>();
 				if (mainButton && gr.scoreKeeper && !gr.scoreKeeper.isAutoClicking) {

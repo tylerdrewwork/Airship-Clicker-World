@@ -15130,6 +15130,8 @@ GameObject:
   - component: {fileID: 1968298738}
   - component: {fileID: 1968298737}
   - component: {fileID: 1968298741}
+  - component: {fileID: 1968298742}
+  - component: {fileID: 1968298743}
   m_Layer: 17
   m_Name: Click Target
   m_TagString: Untagged
@@ -15244,6 +15246,53 @@ MonoBehaviour:
   forceContext: 0
   metadata:
     name: MainButton
+    singleton: 0
+    decorators: []
+    properties: []
+    displayIcon: {fileID: 0}
+    displayName: 
+--- !u!114 &1968298742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968298736}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a3997cd9184f2b439570425a387cdb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  refreshMode: 1
+  transformSpace: 1
+  translate: 0
+  translationSpeed: {x: 0, y: 0, z: 0}
+  rotate: 0
+  angularRotationSpeed: {x: 0, y: 0, z: 0}
+  scale: 0
+  scaleSpeed: {x: 0, y: 0, z: 0}
+  sineMotion: 0
+  sineMod: 1
+  sineOffset: 0
+  randomizeOffset: 0
+--- !u!114 &1968298743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968298736}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: ca030fbf-e0f6-4bff-8699-0c4e88d8dcc0
+  script: {fileID: 8686416624531296926, guid: 6aaaf01c782a31e44927df480b1f8bf2, type: 3}
+  scriptPath: Assets/Code/Utils/BounceTween.lua
+  forceContext: 0
+  metadata:
+    name: BounceTween
     singleton: 0
     decorators: []
     properties: []
