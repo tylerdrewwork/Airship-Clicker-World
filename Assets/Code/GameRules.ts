@@ -11,6 +11,7 @@ export default class GameRules extends AirshipSingleton {
 
 	public scoreKeeper: ScoreKeeper;
 	public clickVisuals: ClickVisuals;
+	public spawnOrigin: GameObject;
 
 	public possibleColors: Color[];
 

@@ -11,6 +11,8 @@ export default class CustomCharacterController extends AirshipBehaviour {
 	public cursorRect: RectTransform;
 	private isOwner: boolean;
 	public cursorColor: Color;
+	
+	public playerModelParentGameObject: GameObject;
 
 
 	protected Start(): void {
@@ -40,6 +42,10 @@ export default class CustomCharacterController extends AirshipBehaviour {
 			Mouse.onLeftDown.Connect((event) => {
 				this.OnMouseLeftDown();
 			})
+
+			this.playerModelParentGameObject.transform.position = GameRules.Get().spawnOrigin.transform.position;
+			this.playerModelParentGameObject.transform.rotation = GameRules.Get().spawnOrigin.transform.rotation;
+			
 		}
 		
 		
@@ -125,5 +131,9 @@ export default class CustomCharacterController extends AirshipBehaviour {
 				}
 			}
 		}
+	}
+	
+	private PlacePlayerModelInWorld() {
+		
 	}
 }
